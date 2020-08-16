@@ -4,7 +4,7 @@ buildscript {
         jcenter()
         mavenLocal()
         maven {
-            url  "https://dl.bintray.com/ppanda-beta/maven"
+            url "https://dl.bintray.com/ppanda-beta/maven"
         }
     }
 }
@@ -15,7 +15,7 @@ allprojects {
         jcenter()
         mavenLocal()
         maven {
-            url  "https://dl.bintray.com/ppanda-beta/maven"
+            url "https://dl.bintray.com/ppanda-beta/maven"
         }
     }
 }
