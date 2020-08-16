@@ -1,0 +1,22 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        jcenter()
+        mavenLocal()
+        maven {
+            url  "https://dl.bintray.com/ppanda-beta/maven"
+        }
+    }
+}
+
+allprojects {
+    repositories {
+        mavenCentral()
+        jcenter()
+        mavenLocal()
+        maven {
+            url  "https://dl.bintray.com/ppanda-beta/maven"
+        }
+    }
+}
+
