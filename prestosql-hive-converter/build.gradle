@@ -3,7 +3,9 @@ plugins {
 }
 
 group 'ppanda.presto'
-version '0.0.1'
+ext {
+    artifactName = "presto-hive-converter"
+}
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
@@ -23,3 +25,11 @@ compileKotlin {
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }
+
+
+setupPublishing(
+        this,
+        artifactName,
+        'Presto to Hive converter',
+        'Convert presto sql to hiveql'
+)
