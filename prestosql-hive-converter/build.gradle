@@ -4,7 +4,7 @@ plugins {
 
 group 'ppanda.presto'
 ext {
-    artifactName = "presto-hive-converter"
+    artifactName = "prestosql-hive-converter"
 }
 
 dependencies {

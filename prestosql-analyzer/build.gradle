@@ -5,7 +5,7 @@ plugins {
 group 'ppanda.presto'
 
 ext {
-    artifactName = "presto-analyzer"
+    artifactName = "prestosql-analyzer"
 }
 
 dependencies {
