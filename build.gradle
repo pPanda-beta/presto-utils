@@ -106,11 +106,11 @@ void setupPublishing(prj, artifactName, pomName, pomDescription) {
     publishToJCenterTask.finalizedBy(removePoisonousMavenVersionTask)
 
 
-//    prj.signing {
-//        useInMemoryPgpKeys(signingKey, signingPassword)
-//
-//        sign prj.publishing.publications[prj.name]
-//    }
+    prj.signing {
+        useInMemoryPgpKeys(signingKey, signingPassword)
+
+        sign prj.publishing.publications[prj.name]
+    }
 }
 
 
