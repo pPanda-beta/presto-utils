@@ -8,6 +8,8 @@ import ppanda.prestosql.analyzer.extractors.extractTables
 import ppanda.prestosql.analyzer.visitors.DepthFirstVisitor
 
 object Explanation {
+
+    @JvmStatic
     fun getLineageInfo(statement: Statement): Map<Identifier, Collection<DereferenceExpression>> {
         val aliasVisitor = DepthFirstVisitor.by(extractAliases())
         val aliases = statement.accept(aliasVisitor, null)
@@ -38,6 +40,7 @@ object Explanation {
             statement.accept(DepthFirstVisitor.by(extractColumns()), null).toList()
 
 
+    @JvmStatic
     fun getDependencyTables(statement: Statement) =
             statement.accept(DepthFirstVisitor.by(extractTables()), null).toList()
 
@@ -45,7 +48,8 @@ object Explanation {
             DepthFirstVisitor.by(extractNodes(classOfN))
                     .process(root)
 
-    private fun extractColumnExprs(statement: Statement): Sequence<SelectItem> {
+    @JvmStatic
+    fun extractColumnExprs(statement: Statement): Sequence<SelectItem> {
         return getAllNodes(statement, QuerySpecification::class.java)
                 .flatMap { it.select.selectItems.asSequence() }
     }
