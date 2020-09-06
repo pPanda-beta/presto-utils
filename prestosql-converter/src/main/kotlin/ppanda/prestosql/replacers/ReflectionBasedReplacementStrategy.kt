@@ -4,7 +4,7 @@ import io.prestosql.sql.tree.Node
 import java.lang.reflect.Field
 
 
-open class ReflectionBasedReplacementStrategy<P : Node, C : Node> : NodeReplacementStrategy<P, C> {
+open class ReflectionBasedReplacementStrategy<P : Node, C> : NodeReplacementStrategy<P, C> {
     override fun replace(parent: P, oldChild: C, newChild: C) {
         val visited = mutableSetOf<Any>()
         ReplacerImpl<C>(oldChild, newChild, visited)
@@ -13,7 +13,7 @@ open class ReflectionBasedReplacementStrategy<P : Node, C : Node> : NodeReplacem
 }
 
 // Recursive depth first replacement strategy
-private class ReplacerImpl<C : Node>(
+private class ReplacerImpl<C>(
         private val oldChild: C?,
         private val newChild: C?,
         private val visited: MutableSet<Any>) {
