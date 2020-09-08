@@ -94,7 +94,7 @@ void setupPublishing(prj, artifactName, pomName, pomDescription) {
 
     def removeCurrentVersionTask = prj.task("removeCurrentVersionIfExists", {
         doFirst {
-            deleteArtifactVersion(version, artifactName, false)
+            deleteArtifactVersion(prj.version, artifactName, false)
         }
     })
 
