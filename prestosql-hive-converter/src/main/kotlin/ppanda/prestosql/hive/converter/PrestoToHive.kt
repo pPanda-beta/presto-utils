@@ -7,16 +7,15 @@ import io.prestosql.sql.tree.Node
 import io.prestosql.sql.tree.Statement
 import org.apache.hadoop.hive.ql.parse.ASTNode
 import org.apache.hadoop.hive.ql.parse.ParseDriver
-import ppanda.prestosql.converters.ColumnNameBlockQuote
-import ppanda.prestosql.converters.SqlConverter
-import ppanda.prestosql.converters.TableNameCatalogRemover
-import ppanda.prestosql.converters.TryUnpacker
+import ppanda.prestosql.converters.*
+import ppanda.prestosql.converters.FunctionTranslators.Companion.justRenameTo
 import ppanda.prestosql.replacers.BottomUpReplacer
 import ppanda.prestosql.replacers.ReflectionBasedReplacementStrategy
 
 
 open class PrestoToHive(
-        converters: List<SqlConverter<out Node>> = listOf(TryUnpacker(), ColumnNameBlockQuote(), TableNameCatalogRemover()),
+        converters: List<SqlConverter<out Node>> = listOf(
+                TryUnpacker(), ColumnNameBlockQuote(), TableNameCatalogRemover(), functionTranslators),
         val parsingOptions: ParsingOptions = ParsingOptions(),
         val prestosqlParser: SqlParser = SqlParser(),
         val hiveParserDriver: ParseDriver = ParseDriver()
@@ -64,3 +63,7 @@ data class ConversionResult(
     fun isSuccessful(): Boolean = convertedHiveql != null
     fun hasValidHql(): Boolean = convertedParsedHiveql != null
 }
+
+val functionTranslators = FunctionTranslators(mapOf(
+        "json_extract" to justRenameTo("get_json_object")
+))

@@ -33,6 +33,16 @@ class PrestoToHiveTest : AnnotationSpec() {
     }
 
 
+    @Test
+    fun `should convert functions`() {
+        val sql = "SELECT json_extract(json, '\$.store.book') as book FROM hive.my_schema.tab1 "
+
+        val result = prestoToHive.convertStatement(sql)
+        val expectedModifiedSql = """SELECT get_json_object(json, '$.store.book') `book` FROM my_schema.tab1"""
+        result.convertedHiveql!! shouldMatchIgnoringWhitespaces expectedModifiedSql
+    }
+
+
     infix fun String.shouldMatchIgnoringWhitespaces(expected: String) =
             replaceWhitespaces(this) shouldBe replaceWhitespaces(expected)
 
