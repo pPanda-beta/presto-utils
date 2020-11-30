@@ -9,13 +9,14 @@ import org.apache.hadoop.hive.ql.parse.ASTNode
 import org.apache.hadoop.hive.ql.parse.ParseDriver
 import ppanda.prestosql.converters.ColumnNameBlockQuote
 import ppanda.prestosql.converters.SqlConverter
+import ppanda.prestosql.converters.TableNameCatalogRemover
 import ppanda.prestosql.converters.TryUnpacker
 import ppanda.prestosql.replacers.BottomUpReplacer
 import ppanda.prestosql.replacers.ReflectionBasedReplacementStrategy
 
 
 open class PrestoToHive(
-        converters: List<SqlConverter<out Node>> = listOf(TryUnpacker(), ColumnNameBlockQuote()),
+        converters: List<SqlConverter<out Node>> = listOf(TryUnpacker(), ColumnNameBlockQuote(), TableNameCatalogRemover()),
         val parsingOptions: ParsingOptions = ParsingOptions(),
         val prestosqlParser: SqlParser = SqlParser(),
         val hiveParserDriver: ParseDriver = ParseDriver()

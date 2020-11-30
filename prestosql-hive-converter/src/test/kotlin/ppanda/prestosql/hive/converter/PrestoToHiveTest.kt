@@ -23,6 +23,15 @@ class PrestoToHiveTest : AnnotationSpec() {
         result.convertedHiveql!! shouldMatchIgnoringWhitespaces expectedModifiedSql
     }
 
+    @Test
+    fun `should remove catalog from table name`() {
+        val sql = "CREATE VIEW internal.svo_v3 AS SELECT * FROM hive.my_schema.tab1 "
+
+        val result = prestoToHive.convertStatement(sql)
+        val expectedModifiedSql = """CREATE VIEW internal.svo_v3 AS SELECT * FROM my_schema.tab1 """
+        result.convertedHiveql!! shouldMatchIgnoringWhitespaces expectedModifiedSql
+    }
+
 
     infix fun String.shouldMatchIgnoringWhitespaces(expected: String) =
             replaceWhitespaces(this) shouldBe replaceWhitespaces(expected)
