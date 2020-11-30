@@ -8,6 +8,7 @@ import io.prestosql.sql.tree.Statement
 import org.apache.hadoop.hive.ql.parse.ASTNode
 import org.apache.hadoop.hive.ql.parse.ParseDriver
 import ppanda.prestosql.converters.*
+import ppanda.prestosql.converters.DataTypeModifiers.Companion.replaceBy
 import ppanda.prestosql.converters.FunctionTranslators.Companion.justRenameTo
 import ppanda.prestosql.replacers.BottomUpReplacer
 import ppanda.prestosql.replacers.ReflectionBasedReplacementStrategy
@@ -15,7 +16,7 @@ import ppanda.prestosql.replacers.ReflectionBasedReplacementStrategy
 
 open class PrestoToHive(
         converters: List<SqlConverter<out Node>> = listOf(
-                TryUnpacker(), ColumnNameBlockQuote(), TableNameCatalogRemover(), functionTranslators),
+                TryUnpacker(), ColumnNameBlockQuote(), TableNameCatalogRemover(), functionTranslators, dataTypeModifiers),
         val parsingOptions: ParsingOptions = ParsingOptions(),
         val prestosqlParser: SqlParser = SqlParser(),
         val hiveParserDriver: ParseDriver = ParseDriver()
@@ -66,4 +67,8 @@ data class ConversionResult(
 
 val functionTranslators = FunctionTranslators(mapOf(
         "json_extract" to justRenameTo("get_json_object")
+))
+
+val dataTypeModifiers = DataTypeModifiers(mapOf(
+        "VARCHAR" to replaceBy("STRING")
 ))

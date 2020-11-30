@@ -42,6 +42,15 @@ class PrestoToHiveTest : AnnotationSpec() {
         result.convertedHiveql!! shouldMatchIgnoringWhitespaces expectedModifiedSql
     }
 
+    @Test
+    fun `should convert data types`() {
+        val sql = "SELECT CAST(col1 as VARCHAR) FROM hive.my_schema.tab1 "
+
+        val result = prestoToHive.convertStatement(sql)
+        val expectedModifiedSql = """SELECT CAST(col1 AS STRING) FROM my_schema.tab1 """
+        result.convertedHiveql!! shouldMatchIgnoringWhitespaces expectedModifiedSql
+    }
+
 
     infix fun String.shouldMatchIgnoringWhitespaces(expected: String) =
             replaceWhitespaces(this) shouldBe replaceWhitespaces(expected)
