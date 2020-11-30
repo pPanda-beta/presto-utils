@@ -31,3 +31,9 @@ fun <N : Node> extractNodes(classOfN: Class<N>) = object : AstVisitor<N?, Any?>(
     }
 }
 
+
+fun Node.allChildren(): List<Node> = children + when (this) {
+    //TODO: Somehow those exceptional children are not included in AST
+    is Cast -> listOf(type)
+    else -> emptyList()
+}

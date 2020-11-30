@@ -2,6 +2,7 @@ package ppanda.prestosql.replacers
 
 import io.prestosql.sql.tree.AstVisitor
 import io.prestosql.sql.tree.Node
+import ppanda.prestosql.analyzer.extractors.allChildren
 import ppanda.prestosql.contexts.ContextWithPath
 import ppanda.prestosql.converters.SqlConverter
 import ppanda.prestosql.holders.RefNode
@@ -24,7 +25,7 @@ open class BottomUpReplacer(
     }
 
     override fun visitNode(node: Node, contextWithPath: ReplacementContext): Void? {
-        node.children.forEach { child: Node -> process(child, contextWithPath.next(child)) }
+        node.allChildren().forEach { child: Node -> process(child, contextWithPath.next(child)) }
         replaceCurrentNode(node, contextWithPath)
         return null
     }
