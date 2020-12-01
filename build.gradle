@@ -40,6 +40,7 @@ subprojects {
     afterEvaluate {
         shadowJar {
             zip64 = true
+            relocate('com.google', 'ppanda.shaded.com.google')
         }
     }
 }
