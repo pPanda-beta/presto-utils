@@ -1,5 +1,6 @@
 package ppanda.prestosql.converters
 
+import io.prestosql.sql.tree.Expression
 import io.prestosql.sql.tree.FunctionCall
 import io.prestosql.sql.tree.Node
 import io.prestosql.sql.tree.QualifiedName
@@ -30,6 +31,15 @@ open class FunctionTranslators(
         @JvmStatic
         fun justRenameTo(first: String, vararg remainingParts: String) =
                 justRenameTo(QualifiedName.of(first, *remainingParts))
+
+        @JvmStatic
+        fun byExpressionGen(exprGen: (FunctionCall, ContextWithPath<*, Node>) -> Expression): NodeMapper<FunctionCall> = { fn, ctx ->
+            buildCopyWith(fn, EmptyIdentifier.createAsQn(), exprGen(fn, ctx))
+        }
+
+        @JvmStatic
+        fun buildCopyWith(fn: FunctionCall, newFuncName: QualifiedName, expression: Expression) =
+                FunctionCall(fn.location, newFuncName, fn.window, fn.filter, fn.orderBy, fn.isDistinct, fn.nullTreatment, listOf(expression))
     }
 }
 
