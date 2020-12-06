@@ -32,6 +32,15 @@ class PrestoToHiveTest : AnnotationSpec() {
         result.convertedHiveql!! shouldMatchIgnoringWhitespaces expectedModifiedSql
     }
 
+    @Test
+    fun `should modify syntax for array construction `() {
+        val sql = "SELECT array[1, 2, 3]"
+
+        val result = prestoToHive.convertStatement(sql)
+        val expectedModifiedSql = """SELECT array(1, 2, 3)"""
+        result.convertedHiveql!! shouldMatchIgnoringWhitespaces expectedModifiedSql
+    }
+
 
     @Test
     fun `should convert functions`() {

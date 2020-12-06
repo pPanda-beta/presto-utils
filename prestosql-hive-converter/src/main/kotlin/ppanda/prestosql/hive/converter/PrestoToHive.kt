@@ -16,7 +16,9 @@ import ppanda.prestosql.replacers.ReflectionBasedReplacementStrategy
 
 open class PrestoToHive(
         converters: List<SqlConverter<out Node>> = listOf(
-                TryUnpacker(), ColumnNameBlockQuote(), TableNameCatalogRemover(), functionTranslators, dataTypeModifiers),
+                TryUnpacker(), ColumnNameBlockQuote(), TableNameCatalogRemover(),
+                ArrayConstructorFunctionalSyntaxMaker(),
+                functionTranslators, dataTypeModifiers),
         val parsingOptions: ParsingOptions = ParsingOptions(),
         val prestosqlParser: SqlParser = SqlParser(),
         val hiveParserDriver: ParseDriver = ParseDriver()
