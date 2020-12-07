@@ -8,12 +8,14 @@ open class UnnestModifier(
         private val replacementFnName: String = "explode"
 ) : SqlConverter<Node>() {
     override fun visitAliasedRelation(node: AliasedRelation, context: ContextWithPath<*, Node>?): Node? {
-        if (node.relation !is Unnest) {
+        if (!isApplicable(node, context)) {
             return super.visitAliasedRelation(node, context)
         }
         return Unnest::class.java.cast(node.relation)
                 .let { convertUnnestIntoSelectExpr(it, node) }
     }
+
+    protected open fun isApplicable(node: AliasedRelation, context: ContextWithPath<*, Node>?) = node.relation is Unnest
 
     private fun convertUnnestIntoSelectExpr(unnestNode: Unnest, node: AliasedRelation): TableSubquery {
         val expressions = unnestNode.expressions
