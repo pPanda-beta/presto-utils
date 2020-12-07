@@ -18,6 +18,7 @@ open class PrestoToHive(
         converters: List<SqlConverter<out Node>> = listOf(
                 TryUnpacker(), ColumnNameBlockQuote(), TableNameCatalogRemover(),
                 ArrayConstructorFunctionalSyntaxMaker(),
+                UnnestModifier("explode"),
                 functionTranslators, dataTypeModifiers),
         val parsingOptions: ParsingOptions = ParsingOptions(),
         val prestosqlParser: SqlParser = SqlParser(),

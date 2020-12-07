@@ -60,6 +60,16 @@ class PrestoToHiveTest : AnnotationSpec() {
         result.convertedHiveql!! shouldMatchIgnoringWhitespaces expectedModifiedSql
     }
 
+    @Test
+    fun `should modify unnest without cardinality `() {
+        //TODO: Hive mandates you to put a table alias -> SELECT * FROM (...) AS `myDynamicallyGeneratedTableAlias`
+        val sql = """SELECT * FROM unnest(array[1,2,3]) as t(x)"""
+
+        val result = prestoToHive.convertStatement(sql)
+        val expectedModifiedSql = """SELECT * FROM ( SELECT explode(array(1, 2, 3)) x )"""
+        result.convertedHiveql!! shouldMatchIgnoringWhitespaces expectedModifiedSql
+    }
+
 
     infix fun String.shouldMatchIgnoringWhitespaces(expected: String) =
             replaceWhitespaces(this) shouldBe replaceWhitespaces(expected)
