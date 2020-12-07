@@ -70,6 +70,31 @@ class PrestoToHiveTest : AnnotationSpec() {
         result.convertedHiveql!! shouldMatchIgnoringWhitespaces expectedModifiedSql
     }
 
+    @Test
+    fun `should remove extra ROW func call `() {
+        val sql = """
+            SELECT *
+            FROM (
+                VALUES 
+                    ROW(1, 'apple') ,
+                    ROW(2, 'ball')
+            ) AS t(num, str)
+        """
+
+        val expectedModifiedSql = """
+            SELECT *
+            FROM (
+                VALUES 
+                    (1, 'apple') ,
+                    (2, 'ball')
+            ) t (num, str)
+        """
+
+
+        val result = prestoToHive.convertStatement(sql)
+        result.convertedHiveql!! shouldMatchIgnoringWhitespaces expectedModifiedSql
+    }
+
 
     infix fun String.shouldMatchIgnoringWhitespaces(expected: String) =
             replaceWhitespaces(this) shouldBe replaceWhitespaces(expected)

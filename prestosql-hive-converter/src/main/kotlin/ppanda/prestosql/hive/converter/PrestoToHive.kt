@@ -17,6 +17,7 @@ import ppanda.prestosql.replacers.ReflectionBasedReplacementStrategy
 open class PrestoToHive(
         converters: List<SqlConverter<out Node>> = listOf(
                 TryUnpacker(), ColumnNameBlockQuote(), TableNameCatalogRemover(),
+                ValuesRowUnpacker(),
                 ArrayConstructorFunctionalSyntaxMaker(),
                 UnnestModifier("explode"),
                 functionTranslators, dataTypeModifiers),
