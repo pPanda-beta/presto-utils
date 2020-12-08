@@ -95,6 +95,17 @@ class PrestoToHiveTest : AnnotationSpec() {
         result.convertedHiveql!! shouldMatchIgnoringWhitespaces expectedModifiedSql
     }
 
+    @Test
+    fun `should convert decimal literals `() {
+        val sql = """ SELECT 1.0013 as v, DECIMAL '1.2239' as w """
+
+        val expectedModifiedSql = """  SELECT 1.0013E0 `v` , 1.2239d `w` """
+
+
+        val result = prestoToHive.convertStatement(sql)
+        result.convertedHiveql!! shouldMatchIgnoringWhitespaces expectedModifiedSql
+    }
+
 
     infix fun String.shouldMatchIgnoringWhitespaces(expected: String) =
             replaceWhitespaces(this) shouldBe replaceWhitespaces(expected)

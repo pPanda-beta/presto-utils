@@ -2,6 +2,7 @@ package ppanda.prestosql.hive.converter
 
 import io.prestosql.sql.SqlFormatter
 import io.prestosql.sql.parser.ParsingOptions
+import io.prestosql.sql.parser.ParsingOptions.DecimalLiteralTreatment
 import io.prestosql.sql.parser.SqlParser
 import io.prestosql.sql.tree.Node
 import io.prestosql.sql.tree.Statement
@@ -20,8 +21,9 @@ open class PrestoToHive(
                 ValuesRowUnpacker(),
                 ArrayConstructorFunctionalSyntaxMaker(),
                 UnnestModifier("explode"),
+                DecimalLiteralConverter(),
                 functionTranslators, dataTypeModifiers),
-        val parsingOptions: ParsingOptions = ParsingOptions(),
+        val parsingOptions: ParsingOptions = ParsingOptions(DecimalLiteralTreatment.AS_DOUBLE),
         val prestosqlParser: SqlParser = SqlParser(),
         val hiveParserDriver: ParseDriver = ParseDriver()
 ) {
