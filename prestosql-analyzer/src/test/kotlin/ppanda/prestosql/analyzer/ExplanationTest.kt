@@ -45,6 +45,22 @@ class ExplanationTest : AnnotationSpec() {
                 .shouldContainExactlyInAnyOrder("Table{hive.default.y_table}", "Table{hive.default.x_table}")
     }
 
+    @Test
+    fun `should exclude named queries from table dependencies of a view`() {
+        val sql = """
+            WITH t(id, name) AS (SELECT 123, 'abc')
+            SELECT * 
+            FROM hive.default.x_table
+            INNER JOIN t ON id
+        """.trimMargin()
+
+        val upstreamTables = Explanation.getDependencyTables(SqlParser().createStatement(sql, ParsingOptions()))
+
+        upstreamTables
+                .map { it.toString() }
+                .shouldContainExactlyInAnyOrder("Table{hive.default.x_table}")
+    }
+
     private fun <K : Any, V : Any> Map<K, Collection<V>>.shouldHaveMapping(keyString: String, values: Set<String>)
             : Map<K, Collection<V>> {
         this

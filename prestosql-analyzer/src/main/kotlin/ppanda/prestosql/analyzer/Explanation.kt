@@ -41,8 +41,14 @@ object Explanation {
 
 
     @JvmStatic
-    fun getDependencyTables(statement: Statement) =
-            statement.accept(DepthFirstVisitor.by(extractTables()), null).toList()
+    fun getDependencyTables(statement: Statement): List<Table> {
+        val tables = DepthFirstVisitor.by(extractTables()).process(statement)
+        val withQueries = DepthFirstVisitor.by(extractNodes(WithQuery::class.java)).process(statement)
+        val withQueryAliases = withQueries.map { it.name.value }.toSet()
+        return tables
+                .filter { it.name.toString() !in withQueryAliases }
+                .toList()
+    }
 
     fun <N : Node> getAllNodes(root: Node, classOfN: Class<N>): Sequence<N> =
             DepthFirstVisitor.by(extractNodes(classOfN))
