@@ -38,8 +38,8 @@ open class FunctionTranslators(
         }
 
         @JvmStatic
-        fun buildCopyWith(fn: FunctionCall, newFuncName: QualifiedName, expression: Expression) =
-                FunctionCall(fn.location, newFuncName, fn.window, fn.filter, fn.orderBy, fn.isDistinct, fn.nullTreatment, listOf(expression))
+        fun buildCopyWith(fn: FunctionCall, newFuncName: QualifiedName, vararg expressions: Expression) =
+                FunctionCall(fn.location, newFuncName, fn.window, fn.filter, fn.orderBy, fn.isDistinct, fn.nullTreatment, expressions.toList())
     }
 }
 
