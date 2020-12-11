@@ -15,6 +15,7 @@ open class DepthFirstVisitor<R : Any, C>(private val visitor: AstVisitor<R?, C?>
     }
 
     companion object {
+        @JvmStatic
         fun <R : Any, C> by(visitor: AstVisitor<R?, C?>) = DepthFirstVisitor(visitor)
     }
 }
